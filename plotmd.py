@@ -18,6 +18,10 @@ tall  = []
 eall  = []
 isfree = 0
 
+def running_mean(x, N):
+    cumsum = numpy.cumsum(numpy.insert(x, 0, 0)) 
+    return (cumsum[N:] - cumsum[:-N]) / float(N)
+
 for line in open(File):
 	if "total pressure" in line:
 		p = float(line.split()[3])
@@ -78,6 +82,7 @@ if steps > 600:
 print ""
 print "MD has done", steps, "steps."
 print("Average time per SCF step %6.1f s" % (lave))
+print("Using running average of %4d (steps/20)" % (steps/20))
 print ""
 print "Global averages:"
 print("Average E: %8.4f +- %4.2f eV" % (eave, evar))
@@ -90,17 +95,22 @@ if steps > 600:
 	print("Average p: %8.4f kBar" % (p5ave))
 	print("Average T: %6.2f   K" % (t5ave))
 
+#Running Average over N elements
+N=steps/20
+
 plt.subplot(3,1,1)
 plt.plot(eall,'r-',lw=1)
-
+plt.plot(np.convolve(eall, np.ones((N,))/N, mode='valid'),'g-',lw=2)
 plt.ylabel('Free Energy /eV')
 
 plt.subplot(3,1,2)
 plt.plot(pall,'b-',lw=1)
+plt.plot(np.convolve(pall, np.ones((N,))/N, mode='valid'),'r-',lw=2)
 plt.ylabel('Pressure /kBar')
 
 plt.subplot(3,1,3)
 plt.plot(tall,'g-',lw=1)
+plt.plot(np.convolve(tall, np.ones((N,))/N, mode='valid'),'b-',lw=2)
 plt.ylabel('Temperature /K')
 plt.xlabel('Step')
 
