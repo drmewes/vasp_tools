@@ -23,7 +23,7 @@ def running_mean(x, N):
     return (cumsum[N:] - cumsum[:-N]) / float(N)
 
 #Get all the numbers from OUTCAR file (connect multiple OUTCARs with cat!)
-print "Working though OUTCAR file..."
+print "Working through OUTCAR file..."
 for line in open(File):
 	if "total pressure" in line:
 		p = float(line.split()[3])
@@ -108,7 +108,7 @@ else:
 #Print results to terminal
 print ""
 print "MD has done", steps, "steps."
-print("Average time per SCF step %6.1f s" % (lave))
+print("Average time per SCF step %6.1f s, that is %5d steps per day." % (lave, 24*3600/lave))
 print("Using running average of %4d (steps/20 but at least 50)" % (N))
 print ""
 print "Global averages and deviation:"
@@ -150,12 +150,12 @@ plt.ylabel('Free Energy /eV')
 
 plt.subplot(3,1,2)
 plt.plot(pall,'b-',lw=1)
-plt.plot(running_mean(pall, N),'r-',lw=2)
+plt.plot(running_mean(pall, N),'g-',lw=2)
 plt.ylabel('Pressure /kBar')
 
 plt.subplot(3,1,3)
 plt.plot(tall,'g-',lw=1)
-plt.plot(running_mean(tall, N),'b-',lw=2)
+plt.plot(running_mean(tall, N),'r-',lw=2)
 plt.ylabel('Temperature /K')
 plt.xlabel('Step')
 
