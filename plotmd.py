@@ -32,7 +32,7 @@ for line in open(File):
 			p5sum += p
 		#print steps
 		pall.append(p)
-	if "(temperature  " in line:
+	if "(temperature " in line:
 		t = float(line.split()[5])
 		tsum += t
 		if steps > 500:
