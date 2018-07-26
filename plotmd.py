@@ -13,6 +13,9 @@ lsum  = 0
 p5sum  = 0
 t5sum  = 0
 e5sum  = 0
+pmsum  = 0
+tmsum  = 0
+emsum  = 0
 pall  = []
 tall  = []
 eall  = []
@@ -31,12 +34,17 @@ for line in open(File):
 		if steps > 500:
 			p5sum += p
 		#print steps
+                if steps > 1000:
+                        pmsum += p
+                #print steps
 		pall.append(p)
 	if "(temperature " in line:
 		t = float(line.split()[5])
 		tsum += t
 		if steps > 500:
 			t5sum += t
+                if steps > 1000:
+                        tmsum += t
 		tall.append(t)
 	if "LOOP+" in line:
 		l = float(line.split()[6])
@@ -49,7 +57,9 @@ for line in open(File):
 			esum += e
 			if steps > 500:
 				e5sum += e
-			eall.append(e)
+                        if steps > 1000:
+                                emsum += e
+                        eall.append(e)
 			steps += 1
 	isfree -= 1
 print "... all done!"
@@ -82,34 +92,38 @@ if steps > 600:
 	t5ave = t5sum/(steps-500)		
 	p5ave = p5sum/(steps-500)
 	e5ave = e5sum/(steps-500)
+if steps > 1100:
+        tmave = tmsum/(steps-1000)
+        pmave = pmsum/(steps-1000)
+        emave = emsum/(steps-1000)
 
 elast = plast = tlast = 0 
 
-if steps > 100:
-	tlast50 = tall[-50:] 
-	plast50 = pall[-50:]
-	elast50 = eall[-50:]
+#Running Average over N elements
+if steps > 1099:
+        N=steps/10
+else:
+        N=100
+
+if steps > 200:
+	tlast50 = tall[-N:] 
+	plast50 = pall[-N:]
+	elast50 = eall[-N:]
 	for p in plast50:
 		plast += p
-	plast /= 50
+	plast /= N
 	for t in tlast50:
 		tlast += t
-	tlast /= 50
+	tlast /= N
 	for e in elast50:
 		elast += e
-	elast /= 50
-
-#Running Average over N elements
-if steps > 800:
-	N=steps/20
-else:
-	N=50
+	elast /= N
 
 #Print results to terminal
 print ""
 print "MD has done", steps, "steps."
 print("Average time per SCF step %6.1f s, that is %5d steps per day." % (lave, 24*3600/lave))
-print("Using running average of %4d (steps/20 but at least 50)" % (N))
+print("Using running average of %4d (steps/10 but at least 100)" % (N))
 print ""
 print "Global averages and deviation:"
 print("Average E: %8.4f +- %4.2f eV" % (eave, evar))
@@ -121,9 +135,15 @@ if steps > 600:
 	print("Average E: %8.4f (%+6.4f) eV" % (e5ave, e5ave-eave))
 	print("Average p: %8.4f (%+6.4f) kBar" % (p5ave, p5ave-pave))
 	print("Average T: %6.2f   (%+4.2f)   K" % (t5ave, t5ave-tave))
-if steps > 100:
+if steps > 1100:
+        print ""
+        print "1000+ steps averages and diff to global:"
+        print("Average E: %8.4f (%+6.4f) eV" % (emave, emave-eave))
+        print("Average p: %8.4f (%+6.4f) kBar" % (pmave, pmave-pave))
+        print("Average T: %6.2f   (%+4.2f)   K" % (tmave, tmave-tave))
+if steps > 200:
 	print ""
-	print "Latest averages (last 50 steps)"
+	print "Latest averages (last ", N ," steps)"
 	print("Average E: %8.4f " % (elast))
 	print("Average p: %8.4f " % (plast))
 	print("Average T: %6.2f  K" % (tlast))
