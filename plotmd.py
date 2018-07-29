@@ -100,16 +100,16 @@ if steps > 100:
 	elast /= 50
 
 #Running Average over N elements
-if steps > 800:
-	N=steps/20
+if steps > 999:
+	N=steps/10
 else:
-	N=50
+	N=100
 
 #Print results to terminal
 print ""
 print "MD has done", steps, "steps."
 print("Average time per SCF step %6.1f s, that is %5d steps per day." % (lave, 24*3600/lave))
-print("Using running average of %4d (steps/20 but at least 50)" % (N))
+print("Using running average of %4d steps (steps/10 but at least 100)" % (N))
 print ""
 print "Global averages and deviation:"
 print("Average E: %8.4f +- %4.2f eV" % (eave, evar))
