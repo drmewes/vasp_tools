@@ -99,25 +99,25 @@ if steps > 1100:
 
 elast = plast = tlast = 0 
 
-if steps > 200:
-	tlast50 = tall[-100:] 
-	plast50 = pall[-100:]
-	elast50 = eall[-100:]
-	for p in plast50:
-		plast += p
-	plast /= 100
-	for t in tlast50:
-		tlast += t
-	tlast /= 100
-	for e in elast50:
-		elast += e
-	elast /= 100
-
 #Running Average over N elements
 if steps > 1099:
-	N=steps/10
+        N=steps/10
 else:
-	N=100
+        N=100
+
+if steps > 200:
+	tlast50 = tall[-N:] 
+	plast50 = pall[-N:]
+	elast50 = eall[-N:]
+	for p in plast50:
+		plast += p
+	plast /= N
+	for t in tlast50:
+		tlast += t
+	tlast /= N
+	for e in elast50:
+		elast += e
+	elast /= N
 
 #Print results to terminal
 print ""
@@ -143,7 +143,7 @@ if steps > 1100:
         print("Average T: %6.2f   (%+4.2f)   K" % (tmave, tmave-tave))
 if steps > 200:
 	print ""
-	print "Latest averages (last 100 steps)"
+	print "Latest averages (last ", N ," steps)"
 	print("Average E: %8.4f " % (elast))
 	print("Average p: %8.4f " % (plast))
 	print("Average T: %6.2f  K" % (tlast))
