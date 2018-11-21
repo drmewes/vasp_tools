@@ -84,7 +84,6 @@ def blockAverage(datastream, isplot=True, maxBlockSize=0):
 
 		print "<x> = {0:f} +/- {1:f}\n".format(blockMean[-1], np.sqrt(blockVar[-1]))
 
-		plt.tight_layout()
 		plt.show()
 		
 	return v, blockVar, blockMean
