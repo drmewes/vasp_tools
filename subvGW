@@ -1,0 +1,258 @@
+#!/bin/bash
+
+dir=`pwd`
+PGM_NAME="subv VASP submit script"
+PGM_VERSION="1.0"
+#BINARY_LOCATION="/cm/shared/apps/vasp/5.4.1/vasp.5.4.1/bin/vasp_std"
+BINARY="vasp_ncl"
+MODULE="vasp/mkl/intelmpi/intel/5.4.4-SuperHeavy-D3"
+
+### SET DEFAULT VARIABLES
+
+ncores_default=4
+nnodes_default=1
+#memory_default=4 ###default memory set to 2*ncores
+jobtime_default=72
+
+jobhold=""
+holdid=""
+debug=""
+gpu=0
+mpir="srun"
+
+function usage
+{
+    cat <<-EOF
+$PGM_NAME $PGM_VERSION
+Usage: $PGM_NAME [-j JOB_ID] [-m SIZE] [-N NAME] [-p CPUS] [-n NODES] [-a COPY BACK ALL FILES] INPUT_FILE
+
+EOF
+
+    exit 2
+
+}
+
+function printExit
+{
+    case $1 in
+        [iI]) echo INFO: "$2" ;;
+        [wW]) echo WARNING: "$2" ;;
+        [eE]) echo ERROR: "$2" ; exit 1 ;;
+           *) echo "$1" ;;
+    esac
+}
+
+
+
+
+### PROCESS OPTIONS
+
+while getopts dg:hj:m:N:p:c:n:q:t: options ; do
+      case $options in
+         
+         g) gpu=1
+            ngpu=$OPTARG
+            #mpir="mpiexec.hydra -n $ncores"
+            BINARY="vasp_gpu"
+            MODULE="vasp-gpu/mkl/intelmpi/intel/5.4.1"
+            ;;
+         N) jobname=$OPTARG
+            ;;
+         p) ncores=$OPTARG
+	    ;;
+	 c) actual_ncores=$OPTARG
+            ;;
+         n) nnodes=$OPTARG
+            ;;
+         m) memory=$OPTARG
+            ;;
+         j) holdid=$OPTARG
+            jobhold=1
+            echo "Jobhold not yet implemented."
+            exit 1
+            ;;
+         d) debug=1
+            ;;
+         q) queue=$OPTARG
+            ;;
+         t) jobtime=$OPTARG
+            ;;
+         h) usage
+            exit 0
+            ;;
+         \?)
+            echo "Invalid option: -$OPTARG" 
+            exit 1
+            ;;
+         \:)
+            echo "Option -$OPTARG requires an argument." 
+            exit 1
+            ;;
+         *) usage
+            exit 1
+            ;;
+      esac
+   done
+
+
+shift $((OPTIND-1))
+
+
+
+### CREATE DEFAULT JOBNAME
+
+jobname_default="`echo $dir | sed "s/\/data\/$USER\//d/" | sed "s/\/home\/$USER\//h/ ; s/\//./g"`.$myname"
+
+### PROCESS VARIABLES
+
+if [ -z "$jobname" ]; then
+   jobname=$jobname_default
+fi
+if [ -z "$ncores" ]; then
+   ncores=$ncores_default
+fi
+if [ -z "$actual_ncores" ] ; then
+   actual_ncores=$ncores
+fi
+if [ -z "$nnodes" ]; then
+   nnodes=$nnodes_default
+fi
+if [ -z "$memory" ]; then
+   memory=2
+fi
+if [ -z "$jobtime" ]; then
+   jobtime=$jobtime_default
+fi
+
+### CONSTRUCT OUTPUT FILENAME
+
+
+
+### CREATE OPTION STRING FOR QSUB
+
+if [ -z "$holdid" ]; then
+   optionstring=""
+else
+   optionstring=""
+
+fi
+
+### SET QUEUE TO DEFAULT IF $QUEUE IS EMPTY
+
+if [ -z "$queue" ]; then
+   queue="short"
+fi
+
+### GET MAIL
+
+mail=`cat /home/${USER}/.forward`
+
+
+### CREATE INPUT SCRIPT FOR QSUB
+
+cat <<EOT >> submit.sh
+#!/bin/sh
+
+#SBATCH --job-name=$jobname
+#SBATCH -t 0-${jobtime}:00
+#SBATCH -N $nnodes
+#SBATCH -n $ncores
+#SBATCH --mem-per-cpu=${memory}G
+#SBATCH --mail-type=END
+#SBATCH --mail-type=FAIL
+#SBATCH -o /home/${USER}/err/vasp-%j
+#SBATCH --mail-user=$mail
+#SBATCH -p $queue
+EOT
+if [ "$gpu" -eq "1" ]; then
+    cat <<EOT >> submit.sh
+#SBATCH --gres=gpu:$ngpu
+EOT
+fi
+cat <<EOT >> submit.sh
+echo This job was submitted from the computer:
+echo \$SLURM_SUBMIT_HOST
+echo and the directory:
+echo \$SLURM_SUBMIT_DIR
+echo
+echo It is running on the compute node:
+echo \$SLURM_CLUSTER_NAME
+echo
+echo The local scratch directory "(located on the compute node)" is:
+echo \$SCRATCH
+echo
+
+module load $MODULE
+module list 2>&1
+echo
+
+
+echo "---- The Job is executed at \$(date) on \$(hostname) ----"
+
+# Execute the program
+cp -v * \$SLURM_SUBMIT_DIR
+cd \$SLURM_SUBMIT_DIR
+[ -e output_OLD ] && cp output_OLD output_OLDER
+[ -e output ] && cp output output_OLD
+[ -e XDATCAR_OLD ] && cp XDATCAR_OLD XDATCAR_OLDER
+[ -e XDATCAR ] && cp XDATCAR XDATCAR_OLD
+
+echo "Starting with GS-DFT calculations..."
+cp INCAR_DFT INCAR
+srun -n $actual_ncores $BINARY > output
+echo "finished with density, moving to exact diagonalization..."
+
+mkdir EXACT_DIAG
+cp KPOINTS WAVECAR WAVEDER POSCAR POTCAR EXACT_DIAG
+cp INCAR_EXACT EXACT_DIAG/INCAR
+cd EXACT_DIAG
+srun -n $actual_ncores $BINARY > output
+cd - 
+echo "finished with exact diagonalization, moving to G0W0..."
+
+mkdir GW0
+cp sogap* EXACT_DIAG/KPOINTS EXACT_DIAG/WAVECAR EXACT_DIAG/WAVEDER EXACT_DIAG/POSCAR EXACT_DIAG/POTCAR GW0
+cp INCAR_GW GW0/INCAR
+cd GW0
+srun -n $actual_ncores $BINARY > output
+echo "### One-Shot G0W0 ###" > gaps.out
+/home/mewes/bin/vasp_tools/sogap_GW.sh OUTCAR >> gaps.out
+cp OUTCAR OUTCAR_0
+
+echo "finished with G0W0, doing 4 more iterations..."
+for i in 1 2 3 4 ; do 
+srun -n $actual_ncores $BINARY > output_\$i
+echo "### GW iteration \$((i+1)) ###" >> gaps.out
+/home/mewes/bin/vasp_tools/sogap_GW.sh OUTCAR >> gaps.out
+cp OUTCAR OUTCAR_\$i
+echo "... done with iteration \$i ..."
+done
+
+echo "all done."
+
+echo "---- The Job has finished at \$(date) ----"
+
+EOT
+
+
+if [ -z $debug ]; then
+   sbatch $optionstring submit.sh
+   rm submit.sh
+
+   cat <<EOT
+
+Job has been submitted.
+Name: $jobname, #CPU_RESERVED: $ncores, #CPUS_USED: $actual_ncores, #Nodes: $nnodes, mem: $((${memory}*${ncores}))GB.
+EOT
+
+else
+   cat <<EOT
+
+Job has been created. Submit file will be saved. 
+Name: $jobname, #CPU: $ncores, #Nodes: $nnodes, mem: $((${memory}*${ncores}))GB.
+Submit with sbatch submit.sh!
+EOT
+fi
+
+
+exit 0
