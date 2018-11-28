@@ -19,7 +19,7 @@ for i in $(seq $step0 1 $nsteps) ; do
 	#echo $i $diff $init $harm
 done
 
-totaldiff=$(echo $diff/$nsteps/64 | bc -l)
+totaldiff=$(echo "$diff/($nsteps-$step0)/64" | bc -l)
 
 echo "Final average difference is $totaldiff eV"
 
