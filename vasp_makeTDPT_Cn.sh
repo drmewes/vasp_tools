@@ -7,7 +7,7 @@ for i in $(seq $1 $2 $3) ; do
 	grep "Direct configuration=[' ']*$i$" XDATCAR -A100 >> SHIFT/conf$i.POSCAR
 done
 
-cp ~/Cn/POTCAR ~/Cn/INCAR ~/Cn/KPOINTS SHIFT/
+cp ~/bin/vasp_tools/Cn/POTCAR ~/bin/vasp_tools/Cn/INCAR ~/bin/vasp_tools/Cn/KPOINTS SHIFT/
 
 cd SHIFT
 
@@ -25,7 +25,7 @@ done
 
 for i in SR*CONF* ; do 
 	cd $i 
-	subv -p16 -m4 -t72 -n2 
+	subv -p16 -m2 -t12 -n4 
 	cd - 
 done
 
