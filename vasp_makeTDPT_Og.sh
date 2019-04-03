@@ -1,6 +1,6 @@
 #!/bin/bash
 
-natoms=64
+natoms=32
 
 if [ $4 ] ; then
 	natoms=$4
@@ -14,7 +14,7 @@ for i in $(seq $1 $2 $3) ; do
 	grep "Direct configuration=[' ']*$i$" XDATCAR -A $natoms >> SHIFT/conf$i.POSCAR
 done
 
-cp ~/bin/vasp_tools/Cn/POTCAR ~/bin/vasp_tools/Cn/INCAR ~/bin/vasp_tools/Cn/KPOINTS SHIFT/
+cp ~/bin/vasp_tools/Og/POTCAR ~/bin/vasp_tools/Og/INCAR ~/bin/vasp_tools/Og/KPOINTS SHIFT/
 
 cd SHIFT
 
@@ -25,14 +25,14 @@ for i in $(seq $1 $2 $3) ; do
 done
 
 for i in SR600_CONF* ; do 
-	j=$(echo $i | sed s/SR600/SR400/) 
+	j=$(echo $i | sed s/SR600/SR350/) 
 	cp -r $i $j 
-	sed -i /ENCUT/s/600/400/ $j/INCAR 
+	sed -i /ENCUT/s/600/350/ $j/INCAR 
 done 
 
 for i in SR*CONF* ; do 
 	cd $i 
-	subv -p16 -m2 -t12 -n4 
+	subv -p16 -m3 -t12 -n2-4
 	cd - 
 done
 
@@ -44,7 +44,7 @@ done
 
 for i in SO*CONF* ; do
         cd $i
-        subv -p32 -m4 -t24 -n4
+        subvSO -p32 -m4 -t24 -n2-4
         cd -
 done
 
