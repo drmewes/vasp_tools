@@ -197,7 +197,7 @@ cd \$SLURM_SUBMIT_DIR
 [ -e XDATCAR_OLD ] && cp XDATCAR_OLD XDATCAR_OLDER
 [ -e XDATCAR ] && cp XDATCAR XDATCAR_OLD
 srun -n $actual_ncores $BINARY > output
-
+rm *tmp core*
 echo "---- The Job has finished at \$(date) ----"
 
 EOT

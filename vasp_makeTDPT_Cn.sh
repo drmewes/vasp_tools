@@ -25,7 +25,7 @@ done
 
 for i in SR*CONF* ; do 
 	cd $i 
-	subv -p16 -m2 -t12 -n4 
+	subv -p16 -m2 -t72 -n4 
 	cd - 
 done
 
@@ -34,6 +34,12 @@ for i in SR600_CONF* ; do
 	cp -r $i $j 
 	sed -i /LSORBIT/s/FALSE/TRUE/ $j/INCAR 
 done 
+
+for i in SO*CONF* ; do
+        cd $i
+        subv -p32 -m6 -t72 -n4
+        cd -
+done
 
 
 
