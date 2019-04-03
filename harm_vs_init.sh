@@ -2,6 +2,7 @@
 
 nsteps=$(tac output | grep F= -m1 | awk '{print $1}')
 step0=500
+natoms=64
 
 thisdiff=0
 diff=0
@@ -9,6 +10,11 @@ diff=0
 if [ $1 ] ; then 
  step0=$1
 fi
+
+if [ $2 ] ; then
+ natoms=$2
+fi
+
 
 echo "Nsteps: $nsteps, Step0: $step0"
 
@@ -22,7 +28,7 @@ for i in $(seq $step0 1 $nsteps) ; do
 	#echo $i $diff $init $harm
 done
 
-totaldiff=$(echo "$diff/($nsteps-$step0)/64" | bc -l)
+totaldiff=$(echo "$diff/($nsteps-$step0)/$natoms" | bc -l)
 
 echo "Final average difference is $totaldiff eV"
 

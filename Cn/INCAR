@@ -1,17 +1,20 @@
-NCORE = 4 
+NCORE = 2 
 KPAR = 2 
 
+<<<<<<< HEAD
 SCALEE = 1.07
 
+=======
+>>>>>>> d0d121e62dd2e4f6a5abe9dfdf98dd47f03269d0
 GGA = PS
 GGA_COMPAT = .FALSE.
 
 SYSTEM  =   Cn_300K   
 
 #Major precision parameters
-PREC    =   normal    #Influences FFT-Grids and real-space projector accuracy (LREAL!=F). Recommended: accurate; normal for pre-opt (error ca. 1meV/atom)
+PREC    =   accurate    #Influences FFT-Grids and real-space projector accuracy (LREAL!=F). Recommended: accurate; normal for pre-opt (error ca. 1meV/atom)
 ENCUT   =   600         #PW-cutoff. strongly system dependent. 350-500eV sensible choice. Set always.
-EDIFF   =   1E-05       #accuracy of SCF cycle. Increase to at least 1E-07 for Freq. 
+EDIFF   =   1E-06       #accuracy of SCF cycle. Increase to at least 1E-07 for Freq. 
 EDIFFG  =   1E-04    #accuracy of ionic steps. Negative: 
 LREAL   =   Auto       #Real-space projectors automagic. LREAL = False for highly accurate calc. and IBRION=7/8.
 ISYM    =   0           #Do not use symmetry. SYMPREC sets precision for automatic determination of symmetry.
