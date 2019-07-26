@@ -44,16 +44,8 @@ done
 
 for i in SO*CONF* ; do
         cd $i
-<<<<<<< HEAD
-        subv -p32 -m6 -t72 -n4
+        subvSO -p32 -m4 -t72 -n4
         cd -
 done
-
-=======
-        subv -p32 -m4 -t24 -n4
-        cd -
-done
->>>>>>> d0d121e62dd2e4f6a5abe9dfdf98dd47f03269d0
-
 
 

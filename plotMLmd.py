@@ -22,6 +22,7 @@ pall  = []
 tall  = []
 Deall  = [] #collects difference between ML-e and SCF-e
 MLeall = []
+SCFsteps = []
 isfree = 0
 isMLfree = 0
 eSCF = 0 
@@ -75,7 +76,8 @@ for line in open(File):
                         steps += 1
 			if isfree > -55:
 				Deall.append(MLe-eSCF)
-                        	Desum += (MLe-eSCF)                        
+                        	Desum += (MLe-eSCF)
+				SCFsteps.append(steps)
         isMLfree -= 1
 
 print "... all done!"
@@ -155,15 +157,15 @@ if steps > 600:
 if steps > 1100:
         print ""
         print "1000+ steps averages and diff to global:"
-        print("Average E: %8.4f (%+6.4f) eV" % (MLemave, MLemave-eave))
+        print("Average E: %8.4f (%+6.4f) eV" % (MLemave, MLemave-MLeave))
         print("Average T: %6.2f   (%+4.2f)   K" % (tmave, tmave-tave))
 if steps > 200:
 	print ""
 	print "Latest averages (last ", N ," steps)"
 	print("Average E: %8.4f " % (elast))
 	print("Average T: %6.2f  K" % (tlast))
-
-
+print ""
+print "Steps with SCF calculation:", SCFsteps
 #write the good stuff to files
 file = open('pres.txt', 'w')
 for p in pall:

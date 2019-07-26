@@ -44,7 +44,7 @@ done
 
 for i in SO*CONF* ; do
         cd $i
-        subvSO -p32 -m4 -t24 -n2-4
+        subvSO -p32 -m4 -t72 -n2-4
         cd -
 done
 
