@@ -116,7 +116,7 @@ if steps > 600:
 	MLe5ave = MLe5sum/(steps-500)
 if steps > 1100:
         tmave = tmsum/(steps-1000)
-        MLemave = emsum/(steps-1000)
+        MLemave = MLemsum/(steps-1000)
 
 elast = tlast = 0 
 
@@ -150,12 +150,12 @@ print("Average  T: %6.2f   +- %3.1f  K" % (tave, tvar))
 if steps > 600:
 	print ""
 	print "500+ steps averages and diff to global:"
-	print("Average E: %8.4f (%+6.4f) eV" % (e5ave, e5ave-eave))
+	print("Average E: %8.4f (%+6.4f) eV" % (MLe5ave, MLe5ave-MLeave))
 	print("Average T: %6.2f   (%+4.2f)   K" % (t5ave, t5ave-tave))
 if steps > 1100:
         print ""
         print "1000+ steps averages and diff to global:"
-        print("Average E: %8.4f (%+6.4f) eV" % (emave, emave-eave))
+        print("Average E: %8.4f (%+6.4f) eV" % (MLemave, MLemave-eave))
         print("Average T: %6.2f   (%+4.2f)   K" % (tmave, tmave-tave))
 if steps > 200:
 	print ""
