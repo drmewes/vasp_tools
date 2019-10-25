@@ -20,7 +20,7 @@ LSORBIT = FALSE
 MAXMIX = 50
 
 #Electronic steps
-ALGO    =   Fast #SCF-algorithm. Normal (blocked Davidson: slow, good convergence); VeryFast (RMM-DIIS: very fast, convergence problems); Fast (DAV first steps, then RMM-DIIS). Other options: Conjugate, All, Damped.
+ALGO    =   Normal #F-algorithm. Normal (blocked Davidson: slow, good convergence); VeryFast (RMM-DIIS: very fast, convergence problems); Fast (DAV first steps, then RMM-DIIS). Other options: Conjugate, All, Damped.
 NELM    =   100        #Maximum no. of electronic steps.
 NELMIN  =   5           #Minimal no. of electronic steps. 10 for freq-runs.
 NELMDL  =   -5         #No update of charge for X steps. Increase to -15 for IALGO = 48 (RMM) and for slabs.

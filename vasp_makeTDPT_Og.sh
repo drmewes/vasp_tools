@@ -32,7 +32,7 @@ done
 
 for i in SR*CONF* ; do 
 	cd $i 
-	subv -p16 -m3 -t12 -n2-4
+	subv -p16 -m2 -t24 -n4 -q large
 	cd - 
 done
 
@@ -44,7 +44,7 @@ done
 
 for i in SO*CONF* ; do
         cd $i
-        subvSO -p32 -m4 -t24 -n2-4
+        subv -p32 -m3 -t72 -n4 -q large
         cd -
 done
 
