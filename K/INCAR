@@ -1,0 +1,43 @@
+KPAR = 1
+NCORE = 5
+
+GGA = PS
+GGA_COMPAT = .FALSE.
+
+SYSTEM  =   K_lqd
+
+#Major precision parameters
+PREC    =   accurate  #Influences FFT-Grids and real-space projector accuracy (LREAL!=F). Recommended: accurate; normal for pre-opt (error ca. 1meV/atom)
+ENCUT   =   300         #PW-cutoff. strongly system dependent. 350-500eV sensible choice. Set always.
+EDIFF   =   1E-06       #accuracy of SCF cycle. Increase to at least 1E-07 for Freq. 
+EDIFFG  =   1E-04    #accuracy of ionic steps. Negative: 
+LREAL   =   Auto       #Real-space projectors automagic. LREAL = False for highly accurate calc. and IBRION=3/8.
+ISYM    =   0           #Do not use symmetry. SYMPREC sets precision for automatic determination of symmetry.
+SYMPREC =   1E-7
+ISPIN   =   1            #Chr: For clean Si(001) surface
+
+LSORBIT = FALSE
+MAXMIX = 50
+
+#Electronic steps
+ALGO    =   Normal #F-algorithm. Normal (blocked Davidson: slow, good convergence); VeryFast (RMM-DIIS: very fast, convergence problems); Fast (DAV first steps, then RMM-DIIS). Other options: Conjugate, All, Damped.
+NELM    =   100        #Maximum no. of electronic steps.
+NELMIN  =   5           #Minimal no. of electronic steps. 10 for freq-runs.
+NELMDL  =   -5         #No update of charge for X steps. Increase to -15 for IALGO = 48 (RMM) and for slabs.
+ISMEAR  =   -1         #Convergence acceleration by smearing. 0 - Gaussian (recommended), 1 (MP), -5 (tetrahedron methodt optimize with -5, kmin=3)
+SIGMA   =   0.0795     #kT for 330 K
+
+#Ionic steps - Optimization
+IBRION  =   -1           #-1(no opt); 0(MD); 1(quasi-Newton - near equilibrium, accurate forces and POTIM from CG-step near from equilib)
+NSW     =   1          #Maximum no. of ionic steps.
+ISIF    =   2          #Degrees of freedom to be relaxed. 0,1,2 (relax ions); 3 (ions, volume, shape); 4(ions,shape) ; 5 (shape); 6 (shape,volume); 7 (volume). Careful with 3!
+POTIM   =   0.1       #Scaling parameter for forces in IBRION=1-3 runs. Can be determined in IB=1 run.
+NFREE   =   5          #Number of ionic steps to be taken into account for DIIS-procedure.
+ADDGRID =   T          #Additional support grid for augmentation charges in PAW approach. Reduces noise in forces for better ionic convergence.
+
+#Output control
+NWRITE  =   2           #General flag for output verbosity. 2 = normal, 3 = a lot
+LWAVE   =   F           #Generate WAVECAR
+LCHARG  =   F           #Generate CHGCAR
+LVTOT   =   F           #Generate LOCPOT
+
