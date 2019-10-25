@@ -1,12 +1,8 @@
 NCORE = 2 
 KPAR = 2 
 
-<<<<<<< HEAD
-SCALEE = 1.07
-
-=======
->>>>>>> d0d121e62dd2e4f6a5abe9dfdf98dd47f03269d0
-GGA = PS
+GGA = PE
+IVDW = 12 
 GGA_COMPAT = .FALSE.
 
 SYSTEM  =   Cn_300K   
@@ -25,10 +21,10 @@ LSORBIT = FALSE
 MAXMIX = 30   
 
 #Electronic steps
-ALGO    =   Normal     #SCF-algorithm. Normal (blocked Davidson: slow, good convergence); VeryFast (RMM-DIIS: very fast, convergence problems); 
+ALGO    =   Fast       #SCF-algorithm. Normal (blocked Davidson: slow, good convergence); VeryFast (RMM-DIIS: very fast, convergence problems); 
 NELM    =   100        #Maximum no. of electronic steps.
 NELMIN  =   4          #Minimal no. of electronic steps. 10 for freq-runs.
-NELMDL  =   -5         #No update of charge for X steps. Increase to -15 for IALGO = 48 (RMM) and for slabs.
+NELMDL  =   -15        #No update of charge for X steps. Increase to -15 for IALGO = 48 (RMM) and for slabs.
 ISMEAR  =   1          #Convergence acceleration by smearing. 0 - Gaussian (recommended), 1 (MP), -5 (tetrahedron method - very accurate, needs G-centered k-mesh, do not optimize with -5, kmin=3)
 SIGMA   =   0.0259     #Controls smearing. 0.05 for semiconductors/isolators; 0.2 for metals.
 

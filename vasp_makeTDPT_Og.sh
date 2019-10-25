@@ -44,7 +44,7 @@ done
 
 for i in SO*CONF* ; do
         cd $i
-        subv -p32 -m3 -t72 -n4 -q large
+        subvSO -p32 -m4 -t72 -n2-4
         cd -
 done
 
