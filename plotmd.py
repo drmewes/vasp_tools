@@ -196,3 +196,22 @@ file = open('temp.txt', 'w')
 for t in tall:
 	file.write("%s\n" % t)
 
+#Throw in some nice plots       
+plt.subplot(3,1,1)
+plt.plot(eall,'r-',lw=1)
+plt.plot(running_mean(eall, N),'b-',lw=2)
+plt.ylabel('Free Energy /eV')
+
+plt.subplot(3,1,2)
+plt.plot(pall,'b-',lw=1)
+plt.plot(running_mean(pall, N),'g-',lw=2)
+plt.ylabel('Pressure /kBar')
+
+plt.subplot(3,1,3)
+plt.plot(tall,'g-',lw=1)
+plt.plot(running_mean(tall, N),'r-',lw=2)
+plt.ylabel('Temperature /K')
+plt.xlabel('Step')
+
+plt.show()
+
