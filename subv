@@ -118,7 +118,7 @@ if [ -z "$nnodes" ]; then
    nnodes=$nnodes_default
 fi
 if [ -z "$memory" ]; then
-   memory=2
+   memory="1.5"
 fi
 if [ -z "$jobtime" ]; then
    jobtime=$jobtime_default

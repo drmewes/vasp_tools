@@ -1,14 +1,28 @@
-KPAR = 2
-NCORE = 4 
+KPAR = 1
+NCORE = 5
 
-GGA = PS
+#BLYP
+GGA = B5
+ALDAX = 1.00
+AGGAX = 1.00
+AGGAC = 1.00
+ALDAC = 0.00
+
+#D3 for BLYP
+IVDW = 12
+VDW_S6 = 1.0000
+VDW_S8 = 2.6996
+VDW_A1 = 0.4298
+VDW_A2 = 4.2359
+VDW_RADIUS   =   50.0
+VDW_CNRADIUS =   10.0
 GGA_COMPAT = .FALSE.
 
-SYSTEM  =   Cn_FCC
+SYSTEM  =   K_lqd
 
 #Major precision parameters
 PREC    =   accurate  #Influences FFT-Grids and real-space projector accuracy (LREAL!=F). Recommended: accurate; normal for pre-opt (error ca. 1meV/atom)
-ENCUT   =   600         #PW-cutoff. strongly system dependent. 350-500eV sensible choice. Set always.
+ENCUT   =   400         #PW-cutoff. strongly system dependent. 350-500eV sensible choice. Set always.
 EDIFF   =   1E-06       #accuracy of SCF cycle. Increase to at least 1E-07 for Freq. 
 EDIFFG  =   1E-04    #accuracy of ionic steps. Negative: 
 LREAL   =   Auto       #Real-space projectors automagic. LREAL = False for highly accurate calc. and IBRION=3/8.
@@ -24,8 +38,8 @@ ALGO    =   Normal #F-algorithm. Normal (blocked Davidson: slow, good convergenc
 NELM    =   100        #Maximum no. of electronic steps.
 NELMIN  =   5           #Minimal no. of electronic steps. 10 for freq-runs.
 NELMDL  =   -5         #No update of charge for X steps. Increase to -15 for IALGO = 48 (RMM) and for slabs.
-ISMEAR  =   1          #Convergence acceleration by smearing. 0 - Gaussian (recommended), 1 (MP), -5 (tetrahedron methodt optimize with -5, kmin=3)
-SIGMA   =   0.0284     #kT for 330 K
+ISMEAR  =   -1         #Convergence acceleration by smearing. 0 - Gaussian (recommended), 1 (MP), -5 (tetrahedron methodt optimize with -5, kmin=3)
+SIGMA   =   0.0172     #kT for 330 K
 
 #Ionic steps - Optimization
 IBRION  =   -1           #-1(no opt); 0(MD); 1(quasi-Newton - near equilibrium, accurate forces and POTIM from CG-step near from equilib)
