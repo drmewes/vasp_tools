@@ -2,7 +2,7 @@
 
 nsteps=$(tac output | grep F= -m1 | awk '{print $1}')
 step0=500
-natoms=64
+natoms=32
 
 thisdiff=0
 diff=0

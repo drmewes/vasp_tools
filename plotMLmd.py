@@ -53,7 +53,7 @@ for line in open(File):
                         tmsum += t
 		tall.append(t)
 	if "LOOP+" in line:
-		l = float(line.split()[6])
+		l = 1 #float(line.split()[6])
 		lsum += l
 	if ("  Total+kin.  " in line) or ("   total drift:   " in line):
 		isfree=13
@@ -183,18 +183,18 @@ for t in tall:
 plt.subplot(4,1,1)
 plt.plot(MLeall,'r-',lw=1)
 plt.plot(running_mean(MLeall, N),'b-',lw=2)
-plt.ylabel('Free Energy /eV')
+plt.ylabel('G /eV')
 
 plt.subplot(4,1,2)
 plt.plot(tall,'g-',lw=1)
 plt.plot(running_mean(tall, N),'r-',lw=2)
-plt.ylabel('Temperature /K')
+plt.ylabel('T /K')
 plt.xlabel('Step')
 
 plt.subplot(4,1,3)
 plt.plot(pall,'b-',lw=1)
 plt.plot(running_mean(pall, N),'g-',lw=2)
-plt.ylabel('Pres /kBar (SCF)')
+plt.ylabel('p /kBar (SCF)')
 
 plt.subplot(4,1,4)
 plt.plot(Deall,'r-',lw=1)

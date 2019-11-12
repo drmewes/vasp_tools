@@ -32,7 +32,7 @@ done
 
 for i in SR*CONF* ; do 
 	cd $i 
-	subv -p16 -m3 -t12 -n2-4
+	subv -p16 -m3 -t24 -n2-4
 	cd - 
 done
 

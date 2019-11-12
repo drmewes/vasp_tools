@@ -190,14 +190,14 @@ echo
 echo "---- The Job is executed at \$(date) on \$(hostname) ----"
 
 # Execute the program
-#cp -v * \$SLURM_SUBMIT_DIR
+cp -v /home/mewes/bin/vasp_tools/vdw_kernel.bindat \$SLURM_SUBMIT_DIR
 cd \$SLURM_SUBMIT_DIR
 [ -e output_OLD ] && cp output_OLD output_OLDER
 [ -e output ] && cp output output_OLD
 [ -e XDATCAR_OLD ] && cp XDATCAR_OLD XDATCAR_OLDER
 [ -e XDATCAR ] && cp XDATCAR XDATCAR_OLD
 srun -n $actual_ncores $BINARY > output
-rm *tmp core*
+rm *tmp core* vdw_kernel.bindat
 
 echo "---- The Job has finished at \$(date) ----"
 
