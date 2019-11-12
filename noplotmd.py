@@ -23,10 +23,25 @@ pall  = []
 tall  = []
 eall  = []
 isfree = 0
+avesteps1 = 1000
+avesteps2 = 2000
+avesteps3 = 4000 
 
 def running_mean(x, N):
     cumsum = np.cumsum(np.insert(x, 0, 0)) 
     return (cumsum[N:] - cumsum[:-N]) / float(N)
+
+if len(sys.argv) > 1 :
+        print 'Using custom averages after', int(sys.argv[1]),',', int(sys.argv[1])/2, 'and', int(sys.argv[1])/4, 'steps.'
+        avesteps3 = int(sys.argv[1])
+	avesteps2 = int(avesteps3/2)
+	avesteps1 = int(avesteps3/4)	
+else:
+        print "Using default averages after 1000, 2000 and 4000 steps."
+
+avesteps1p = avesteps1+100
+avesteps2p = avesteps2+100
+avesteps3p = avesteps2+100     
 
 #Get all the numbers from OUTCAR file (connect multiple OUTCARs with cat!)
 print "Working through OUTCAR file..."
@@ -34,23 +49,23 @@ for line in open(File):
 	if "total pressure" in line:
 		p = float(line.split()[3])
 		psum += p
-		if steps > 1000:
+		if steps > avesteps1:
 			pmsum += p
 		#print steps
-                if steps > 2000:
+                if steps > avesteps2:
                         p2msum += p
-                if steps > 4000:
+                if steps > avesteps3:
                         p4msum += p
                 #print steps
 		pall.append(p)
 	if "(temperature " in line:
 		t = float(line.split()[5])
 		tsum += t
-		if steps > 1000:
+		if steps > avesteps1:
 			tmsum += t
-                if steps > 2000:
+                if steps > avesteps2:
                         t2msum += t
-                if steps > 4000:
+                if steps > avesteps3:
                         t4msum += t
 		tall.append(t)
 	if "LOOP+" in line:
@@ -62,11 +77,11 @@ for line in open(File):
 		if isfree > 0:
 			e = float(line.split()[4])
 			esum += e
-			if steps > 1000:
+			if steps > avesteps1:
 				emsum += e
-                        if steps > 2000:
+                        if steps > avesteps2:
                                 e2msum += e
-                        if steps > 4000:
+                        if steps > avesteps3:
                                 e4msum += e
                         eall.append(e)
 			steps += 1
@@ -97,18 +112,18 @@ tvar = np.sqrt(tvar/steps)
 pvar = np.sqrt(pvar/steps)	
 evar = np.sqrt(evar/steps)	
 	
-if steps > 1100:
-	tmave = tmsum/(steps-1000)		
-	pmave = pmsum/(steps-1000)
-	emave = emsum/(steps-1000)
-if steps > 2100:
-        t2mave = t2msum/(steps-2000)
-        p2mave = p2msum/(steps-2000)
-        e2mave = e2msum/(steps-2000)
-if steps > 4100:
-        t2mave = t2msum/(steps-4000)
-        p2mave = p2msum/(steps-4000)
-        e2mave = e2msum/(steps-4000)
+if steps > avesteps1p:
+	tmave = tmsum/(steps-avesteps1)		
+	pmave = pmsum/(steps-avesteps1)
+	emave = emsum/(steps-avesteps1)
+if steps > avesteps2p:
+        t2mave = t2msum/(steps-avesteps2)
+        p2mave = p2msum/(steps-avesteps2)
+        e2mave = e2msum/(steps-avesteps2)
+if steps > avesteps3p:
+        t4mave = t4msum/(steps-avesteps3)
+        p4mave = p4msum/(steps-avesteps3)
+        e4mave = e4msum/(steps-avesteps3)
 
 elast = plast = tlast = 0 
 
@@ -142,21 +157,21 @@ print "Global averages and deviation:"
 print("Average E: %8.4f +- %4.2f eV" % (eave, evar))
 print("Average p: %8.4f +- %4.2f kBar" % (pave, pvar))
 print("Average T: %6.2f   +- %3.1f  K" % (tave, tvar))
-if steps > 1100:
+if steps > avesteps1p:
 	print ""
-	print "1000+ steps averages and diff to global:"
+	print avesteps1, "steps averages and diff to global:"
 	print("Average E: %8.4f (%+6.4f) eV" % (emave, emave-eave))
 	print("Average p: %8.4f (%+6.4f) kBar" % (pmave, pmave-pave))
 	print("Average T: %6.2f   (%+4.2f)   K" % (tmave, tmave-tave))
-if steps > 2100:
+if steps > avesteps2p:
         print ""
-        print "2000+ steps averages and diff to global:"
+        print avesteps2, "steps averages and diff to global:"
         print("Average E: %8.4f (%+6.4f) eV" % (e2mave, e2mave-eave))
         print("Average p: %8.4f (%+6.4f) kBar" % (p2mave, p2mave-pave))
         print("Average T: %6.2f   (%+4.2f)   K" % (t2mave, t2mave-tave))
-if steps > 4100:
+if steps > avesteps3p:
         print ""
-        print "4000+ steps averages and diff to global:"
+        print avesteps3, "steps averages and diff to global:"
         print("Average E: %8.4f (%+6.4f) eV" % (e4mave, e4mave-eave))
         print("Average p: %8.4f (%+6.4f) kBar" % (p4mave, p4mave-pave))
         print("Average T: %6.2f   (%+4.2f)   K" % (t4mave, t4mave-tave))
