@@ -26,9 +26,10 @@ if [ $1 ] ; then
 	fi
 fi
 
-if [ -d GLIN ] && [ -e GLIN/INCAR ] && [ $(grep _SCALEE_ GLIN/INCAR) ] ; then 
+if [ -d GLIN ] && [ -e GLIN/INCAR ] && [ "$(grep _SCALEE_ GLIN/INCAR)" ] ; then 
 
 echo "Creating input for integration with n = $n, k = $k:"
+echo "Creating input for integration with n = $n, k = $k:" > this.integration 
 
 if (( "$n" == "7" )) ; then
 	x=("0.830223896278567" "0.468848793470714" "0.0" "-0.468848793470714" "-0.830223896278567")
