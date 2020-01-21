@@ -1,10 +1,10 @@
 #!/bin/bash
 
-natoms=180 
+natoms=64  
 
-if [ $4 ] ; then
-	natoms=$4
-fi 
+#if [ $4 ] ; then
+#	natoms=$4
+#fi 
 echo "Using $natoms atoms..."
 
 mkdir SHIFT
@@ -14,7 +14,7 @@ for i in $(seq $1 $2 $3) ; do
 	grep --binary-files=text "Direct configuration=[' ']*$i$" XDATCAR -A $natoms >> SHIFT/conf$i.POSCAR
 done
 
-cp ~/bin/vasp_tools/CCl4/POTCAR ~/bin/vasp_tools/CCl4/INCAR ~/bin/vasp_tools/CCl4/KPOINTS SHIFT/
+cp ~/bin/vasp_tools/Sr/POTCAR ~/bin/vasp_tools/Sr/INCAR ~/bin/vasp_tools/Sr/KPOINTS SHIFT/
 
 cd SHIFT
 
@@ -25,9 +25,9 @@ for i in $(seq $1 $2 $3) ; do
 done
 
 for i in SR600_CONF* ; do 
-	j=$(echo $i | sed s/SR600/SR250/) 
+	j=$(echo $i | sed s/SR600/SR300/) 
 	cp -r $i $j 
-	sed -i /ENCUT/s/600/250/ $j/INCAR 
+	sed -i /ENCUT/s/600/300/ $j/INCAR 
 	sed -i /EDIFF/s/06/04/ $j/INCAR
 	sed -i /PREC/s/accurate/normal/ $j/INCAR
 done 
@@ -41,14 +41,15 @@ done
 
 for i in SR* ; do
         cd $i
-        subvMAUI -p160 -m1 -t24 -n2 -q nesi_research
+        subvMAUI -p80 -m1 -t24 -n1 -q nesi_research
         cd -
 done
 
-#for i in K2SR* ; do
-#        cd $i
-#        subvMAUI -p160 -m1 -t12 -n2 -q nesi_research
-#        cd -
-#done
-
+if [ $4 ] ; then  
+for i in K2SR* ; do
+        cd $i
+        subvMAUI -p160 -m1 -t12 -n2 -q nesi_research
+        cd -
+done
+fi
 

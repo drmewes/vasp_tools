@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 Bsize = 0
-File  = '4plot'
+File  = 'ener.txt'
 
 if len(sys.argv) > 1 :
 	print 'Using max Blocksize: ', sys.argv[1]
