@@ -26,7 +26,7 @@ if [ $1 ] ; then
 	fi
 fi
 
-if [ -d GLIN ] && [ -e GLIN/INCAR ] && [ "$(grep _SCALEE_ GLIN/INCAR)" ] ; then 
+if [ -d GLIN ] && [ -e GLIN/INCAR ] && [ $(grep -o _SCALEE_ GLIN/INCAR) ] ; then 
 
 echo "Creating input for integration with n = $n, k = $k:"
 echo "Creating input for integration with n = $n, k = $k:" > this.integration 
@@ -39,7 +39,7 @@ if (( "$n" == "7" )) ; then
 	for i in $(seq 2 $((n-1))) ; do
 		SCALEE=$(awk "BEGIN { print ((${x[$((i-2))]}+1)/2)**(1/(1-$k))}")
 		echo "L$i $SCALEE"
-		cp -rf L1 L$i
+		cp -rf GLIN L$i
 		sed -i s/_SCALEE_/$SCALEE/ L$i/INCAR
 	done
         echo "L$n 0.000000 (non-interacting limit - skipped)"
@@ -49,7 +49,6 @@ elif (( "$n" == "8" )) ; then
         sed -i s/_SCALEE_/1.0/ L1/INCAR
         echo "L1 1.000000 (full interaction - normal MD)"
 	for i in $(seq 2 $((n-1))) ; do
-                cp GLIN L${i} -r
                 SCALEE=$(awk "BEGIN { print ((${x[$((i-2))]}+1)/2)**(1/(1-$k))}")
                 echo "L$i $SCALEE"
                 cp -rf GLIN L$i
@@ -62,7 +61,7 @@ elif (( "$n" == "9" )) ; then
         sed -i s/_SCALEE_/1.0/ L1/INCAR
         echo "L1 1.000000 (full interaction - normal MD)"
         for i in $(seq 2 $((n-1))) ; do
-                cp GLIN L${i} -r
+                #cp GLIN L${i} -r
                 SCALEE=$(awk "BEGIN { print ((${x[$((i-2))]}+1)/2)**(1/(1-$k))}")
                 echo "L$i $SCALEE"
                 cp -rf GLIN L$i
@@ -75,7 +74,7 @@ elif (( "$n" == "10" )) ; then
         sed -i s/_SCALEE_/1.0/ L1/INCAR
 	echo "L1 1.000000 (full interaction - normal MD)"
         for i in $(seq 2 $((n-1))) ; do
-                cp GLIN L${i} -r
+                #cp GLIN L${i} -r
                 SCALEE=$(awk "BEGIN { print ((${x[$((i-2))]}+1)/2)**(1/(1-$k))}")
                 echo "L$i $SCALEE"
                 cp -rf GLIN L$i
