@@ -1,6 +1,6 @@
 #!/bin/bash
 
-natoms=32
+natoms=61
 
 if [ $4 ] ; then
 	natoms=$4
@@ -28,7 +28,16 @@ for i in SR600_CONF* ; do
 	j=$(echo $i | sed s/SR600/SR350/) 
 	cp -r $i $j 
 	sed -i /ENCUT/s/600/350/ $j/INCAR 
+        sed -i /Precision/s/Accurate/Normal/ $j/INCAR 
+        sed -i /EDIFF/s/6/4/ $j/INCAR 
 done 
+
+for i in SR600_CONF* ; do
+        j=$(echo $i | sed s/SR600/K2SR600/)
+        cp -r $i $j
+        sed -i "s/1  1  1/2  2  2/" $j/KPOINTS
+        sed -i /KPAR/s/1/2/ $j/INCAR       
+done
 
 for i in SR*CONF* ; do 
 	cd $i 
@@ -44,9 +53,14 @@ done
 
 for i in SO*CONF* ; do
         cd $i
-        subvSO -p32 -m4 -t72 -n2-4
+        subvSO -p32 -m3 -t72 -n2-4 -q short,long
         cd -
 done
 
+for i in K2SR600*CONF* ; do
+        cd $i
+        subv -p32 -m3 -t72 -n2-4 -q short,long,bigmem
+        cd -
+done
 
 

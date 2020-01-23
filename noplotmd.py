@@ -1,7 +1,6 @@
 #!/usr/bin/python
 import sys, re
 import numpy as np
-import matplotlib.pyplot as plt
 
 File  = 'OUTCAR'
 
@@ -41,7 +40,7 @@ else:
 
 avesteps1p = avesteps1+100
 avesteps2p = avesteps2+100
-avesteps3p = avesteps2+100     
+avesteps3p = avesteps3+100     
 
 #Get all the numbers from OUTCAR file (connect multiple OUTCARs with cat!)
 print "Working through OUTCAR file..."
