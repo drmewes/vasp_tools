@@ -4,7 +4,7 @@ dir=`pwd`
 PGM_NAME="subv VASP submit script"
 PGM_VERSION="1.0"
 #BINARY_LOCATION="/cm/shared/apps/vasp/5.4.1/vasp.5.4.1/bin/vasp_std"
-BINARY="/data/mewes/VASP_FROM_FERENC/bin/vasp_std"
+BINARY="/data/mewes/VASP_FROM_FERENC/bin/vasp_ncl"
 MODULE="vasp/mkl/intelmpi/intel/5.4.4-SuperHeavy-D3"
 
 ### SET DEFAULT VARIABLES
@@ -197,7 +197,7 @@ cd \$SLURM_SUBMIT_DIR
 [ -e XDATCAR_OLD ] && cp XDATCAR_OLD XDATCAR_OLDER
 [ -e XDATCAR ] && cp XDATCAR XDATCAR_OLD
 srun -n $actual_ncores $BINARY > output
-rm *tmp core* vdw_kernel.bindat
+rm *tmp core* vdw_kernel.bindat vasprun.xml
 
 echo "---- The Job has finished at \$(date) ----"
 
