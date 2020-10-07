@@ -2,9 +2,9 @@
 
 natoms=64  
 
-#if [ $4 ] ; then
-#	natoms=$4
-#fi 
+if [ $4 ] ; then
+	natoms=$4
+fi 
 echo "Using $natoms atoms..."
 
 mkdir SHIFT
@@ -39,6 +39,18 @@ for i in SR500_CONF* ; do
 done 
 
 for i in SR500_CONF* ; do
+        j=$(echo $i | sed s/SR500/K4SR500/)
+        cp -r $i $j
+        sed -i "s/2  2  2/4  4  4/" $j/KPOINTS
+done
+
+for i in SR500_CONF* ; do
+        j=$(echo $i | sed s/SR500/K5SR500/)
+        cp -r $i $j
+        sed -i "s/2  2  2/5  5  5/" $j/KPOINTS
+done
+
+for i in SR500_CONF* ; do
         j=$(echo $i | sed s/SR500/SO500/)
         cp -r $i $j
         sed -i "/LSORBIT/s/FALSE/TRUE/" $j/INCAR
@@ -56,11 +68,9 @@ for i in SO* ; do
         cd -
 done
 
-if [ $4 ] ; then  
 for i in K3SR* ; do
         cd $i
         subvMAUI -p160 -m1 -t12 -n2 -q nesi_research
         cd -
 done
-fi
 

@@ -25,10 +25,10 @@ for i in $(seq $1 $2 $3) ; do
 done
 
 for i in SR600_CONF* ; do 
-	j=$(echo $i | sed s/SR600/SR350/) 
+	j=$(echo $i | sed s/SR600/SR400/) 
 	cp -r $i $j 
-	sed -i /ENCUT/s/600/350/ $j/INCAR 
-        sed -i /Precision/s/Accurate/Normal/ $j/INCAR 
+	sed -i /ENCUT/s/600/400/ $j/INCAR 
+        sed -i /PREC/s/accurate/normal/ $j/INCAR 
         sed -i /EDIFF/s/6/4/ $j/INCAR 
 done 
 
@@ -41,7 +41,7 @@ done
 
 for i in SR*CONF* ; do 
 	cd $i 
-	subv -p16 -m3 -t24 -n2-4
+	subvSHMAUI -p80 -m1 -n1 -t24 -q nesi_research
 	cd - 
 done
 
@@ -53,13 +53,13 @@ done
 
 for i in SO*CONF* ; do
         cd $i
-        subvSO -p32 -m3 -t72 -n2-4 -q short,long
+        subvSHSOMAUI -p80 -m1 -n1 -t24 -q nesi_research
         cd -
 done
 
 for i in K2SR600*CONF* ; do
         cd $i
-        subv -p32 -m3 -t72 -n2-4 -q short,long,bigmem
+        subvSHMAUI -p80 -m1 -n1 -t24 -q nesi_research
         cd -
 done
 

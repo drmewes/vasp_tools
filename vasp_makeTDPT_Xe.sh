@@ -28,6 +28,9 @@ for i in SR400_CONF* ; do
 	j=$(echo $i | sed s/SR400/SR200/) 
 	cp -r $i $j 
 	sed -i /ENCUT/s/400/200/ $j/INCAR 
+	sed -i /EDIFF/s/06/04/ $j/INCAR
+	sed -i /PREC/s/accurate/normal/ $j/INCAR
+#	sed -i /LASPH/s/TRUE/FALSE/ $j/INCAR
 done 
 
 for i in SR400_CONF* ; do 

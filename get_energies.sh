@@ -1,6 +1,14 @@
 #!/bin/bash
 
-if [ $1 ] && [ $2 ] && [ $3 ] && [ $4 ] && [ $5 ] && [ $6 ] ; then
+if [ $1 ] && [ $2 ] && [ $3 ] && [ $4 ] && [ $5 ] && [ $6 ] && [ $7 ] ; then
+        for lev in $1 $2 $3 $4 ; do
+                echo "### LEVEL $lev:" 
+                for i in $(seq $5 $6 $7 ) ; do
+                        #echo -n "$i " 
+                        grep "FREE ENERGIE" ${lev}_CONF${i}_SP/OUTCAR -A3 | grep TOTEN | awk '{print $5}'
+                done
+        done
+elif [ $1 ] && [ $2 ] && [ $3 ] && [ $4 ] && [ $5 ] && [ $6 ] ; then
 	for lev in $1 $2 $3 ; do 
 		echo "### LEVEL $lev:" 
 		for i in $(seq $4 $5 $6) ; do 

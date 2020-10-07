@@ -31,7 +31,43 @@ if [ -d GLIN ] && [ -e GLIN/INCAR ] && [ $(grep -o _SCALEE_ GLIN/INCAR) ] ; then
 echo "Creating input for integration with n = $n, k = $k:"
 echo "Creating input for integration with n = $n, k = $k:" > this.integration 
 
-if (( "$n" == "7" )) ; then
+if (( "$n" == "4" )) ; then
+        x=("0.4472135955" "-0.4472135955")
+        cp -rf GLIN L1
+        sed -i s/_SCALEE_/1.0/ L1/INCAR
+        echo "L1 1.000000 (full interaction - normal MD)"
+        for i in $(seq 2 $((n-1))) ; do
+                SCALEE=$(awk "BEGIN { print ((${x[$((i-2))]}+1)/2)**(1/(1-$k))}")
+                echo "L$i $SCALEE"
+                cp -rf GLIN L$i
+                sed -i s/_SCALEE_/$SCALEE/ L$i/INCAR
+        done
+        echo "L$n 0.000000 (non-interacting limit - skipped)"
+elif (( "$n" == "5" )) ; then
+        x=("0.6546536707" "0.0" "-0.6546536707")
+        cp -rf GLIN L1
+        sed -i s/_SCALEE_/1.0/ L1/INCAR
+        echo "L1 1.000000 (full interaction - normal MD)"
+        for i in $(seq 2 $((n-1))) ; do
+                SCALEE=$(awk "BEGIN { print ((${x[$((i-2))]}+1)/2)**(1/(1-$k))}")
+                echo "L$i $SCALEE"
+                cp -rf GLIN L$i
+                sed -i s/_SCALEE_/$SCALEE/ L$i/INCAR
+        done
+        echo "L$n 0.000000 (non-interacting limit - skipped)"
+elif (( "$n" == "6" )) ; then
+        x=("0.7650553239" "0.285315165" "-0.285315165" "-0.7650553239")
+        cp -rf GLIN L1
+        sed -i s/_SCALEE_/1.0/ L1/INCAR
+        echo "L1 1.000000 (full interaction - normal MD)"
+        for i in $(seq 2 $((n-1))) ; do
+                SCALEE=$(awk "BEGIN { print ((${x[$((i-2))]}+1)/2)**(1/(1-$k))}")
+                echo "L$i $SCALEE"
+                cp -rf GLIN L$i
+                sed -i s/_SCALEE_/$SCALEE/ L$i/INCAR
+        done
+        echo "L$n 0.000000 (non-interacting limit - skipped)"
+elif (( "$n" == "7" )) ; then
 	x=("0.830223896278567" "0.468848793470714" "0.0" "-0.468848793470714" "-0.830223896278567")
 	cp -rf GLIN L1
 	sed -i s/_SCALEE_/1.0/ L1/INCAR

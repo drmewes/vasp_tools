@@ -19,21 +19,21 @@ cp ~/bin/vasp_tools/Sr/POTCAR ~/bin/vasp_tools/Sr/INCAR ~/bin/vasp_tools/Sr/KPOI
 cd SHIFT
 
 for i in $(seq $1 $2 $3) ; do 
-	mkdir SR600_CONF${i}_SP
-	cp INCAR POTCAR KPOINTS SR600_CONF${i}_SP 
-	cp conf${i}.POSCAR SR600_CONF${i}_SP/POSCAR 
+	mkdir SR400_CONF${i}_SP
+	cp INCAR POTCAR KPOINTS SR400_CONF${i}_SP 
+	cp conf${i}.POSCAR SR400_CONF${i}_SP/POSCAR 
 done
 
-for i in SR600_CONF* ; do 
-	j=$(echo $i | sed s/SR600/SR300/) 
+for i in SR400_CONF* ; do 
+	j=$(echo $i | sed s/SR400/SR200/) 
 	cp -r $i $j 
-	sed -i /ENCUT/s/600/300/ $j/INCAR 
+	sed -i /ENCUT/s/400/200/ $j/INCAR 
 	sed -i /EDIFF/s/06/04/ $j/INCAR
 	sed -i /PREC/s/accurate/normal/ $j/INCAR
 done 
 
-for i in SR600_CONF* ; do 
-	j=$(echo $i | sed s/SR600/K2SR600/)
+for i in SR400_CONF* ; do 
+	j=$(echo $i | sed s/SR400/K2SR400/)
 	cp -r $i $j 
 	sed -i "s/1  1  1/2  2  2/" $j/KPOINTS 
         sed -i "/KPAR/s/1/4/" $j/INCAR

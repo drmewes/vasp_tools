@@ -1,7 +1,8 @@
 NCORE = 10
 KPAR = 1 
 
-GGA = PS
+GGA = PE
+IVDW = 12
 GGA_COMPAT = .FALSE.
 
 SYSTEM  =   Ca_Lqd
@@ -30,7 +31,7 @@ SIGMA   =   0.1551    #Controls smearing. 0.05 for semiconductors/isolators; 0.2
 IBRION  =   -1          #-1(no opt); 0(MD); 1(quasi-Newton - near equilibrium, accurate forces and POTIM from CG-step necessary); 2(conjugate gradient - far from equilib)
 NSW     =   1     #Maximum no. of ionic steps.
 ISIF    =   3          #Degrees of freedom to be relaxed. 0,1,2 (relax ions); 3 (ions, volume, shape); 4(ions,shape) ; 5 (shape); 6 (shape,volume); 7 (volume). Careful with 3!
-POTIM   =   6          #Scaling parameter for forces in IBRION=1-3 runs. Can be determined in IB=2 run.
+POTIM   =   4          #Scaling parameter for forces in IBRION=1-3 runs. Can be determined in IB=2 run.
 NFREE   =   5          #Number of ionic steps to be taken into account for DIIS-procedure.
 ADDGRID =   T          #Additional support grid for augmentation charges in PAW approach. Reduces noise in forces for better ionic convergence.
 

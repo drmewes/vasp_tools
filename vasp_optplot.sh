@@ -41,7 +41,7 @@ for i in $(seq $start $atstep)
 	done
 
 Econv=$(grep EDIFFG INCAR | awk '{print $3}' | sed 's/[eE]+*/*10^/' | bc -l)
-echo -e "      Converged when dE < "$(echo "scale=6; 27.2114*$Econv" | bc | cut -c -9)
+echo -e "      Converged when dE < "$(echo "scale=6; $Econv" | bc | cut -c -9)
 	 
 
 		

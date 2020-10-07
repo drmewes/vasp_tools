@@ -19,19 +19,21 @@ cp ~/bin/vasp_tools/K/POTCAR ~/bin/vasp_tools/K/INCAR ~/bin/vasp_tools/K/KPOINTS
 cd SHIFT
 
 for i in $(seq $1 $2 $3) ; do 
-	mkdir SR300_CONF${i}_SP 
-	cp INCAR POTCAR KPOINTS SR300_CONF${i}_SP 
-	cp conf${i}.POSCAR SR300_CONF${i}_SP/POSCAR 
+	mkdir SR500_CONF${i}_SP 
+	cp INCAR POTCAR KPOINTS SR500_CONF${i}_SP 
+	cp conf${i}.POSCAR SR500_CONF${i}_SP/POSCAR 
 done
 
-for i in SR300_CONF* ; do 
-	j=$(echo $i | sed s/SR300/SR150/) 
+for i in SR500_CONF* ; do 
+	j=$(echo $i | sed s/SR500/SR250/) 
 	cp -r $i $j 
-	sed -i /ENCUT/s/300/150/ $j/INCAR 
+	sed -i /ENCUT/s/500/250/ $j/INCAR 
+	sed -i /EDIFF/s/06/04/ $j/INCAR
+	sed -i /PREC/s/accurate/normal/ $j/INCAR
 done 
 
-for i in SR300_CONF* ; do 
-	j=$(echo $i | sed s/SR300/K2SR300/)
+for i in SR500_CONF* ; do 
+	j=$(echo $i | sed s/SR500/K2SR500/)
 	cp -r $i $j 
 	sed -i "s/1  1  1/2  2  2/" $j/KPOINTS 
         sed -i "/KPAR/s/1/4/" $j/INCAR
@@ -45,7 +47,7 @@ done
 
 for i in K2SR* ; do
         cd $i
-        subvMAUI -p160 -m1 -t12 -n2 -q nesi_research
+        subvMAUI -p80 -m1 -t12 -n2 -q nesi_research
         cd -
 done
 
