@@ -38,11 +38,11 @@ for i in SR600_CONF* ; do
 	sed -i "s/2  2  2/3  3  3/" $j/KPOINTS 
 done 
 
-for i in SR600_CONF* ; do
-        j=$(echo $i | sed s/SR600/K4SR600/)
-        cp -r $i $j
-        sed -i "s/2  2  2/4  4  4/" $j/KPOINTS
-done
+#for i in SR600_CONF* ; do
+#        j=$(echo $i | sed s/SR600/K4SR600/)
+#        cp -r $i $j
+#        sed -i "s/2  2  2/4  4  4/" $j/KPOINTS
+#done
 
 for i in SR600_CONF* ; do
         j=$(echo $i | sed s/SR600/SO600/)
